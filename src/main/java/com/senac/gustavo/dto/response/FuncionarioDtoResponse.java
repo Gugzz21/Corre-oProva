@@ -1,52 +1,32 @@
-package com.senac.gustavo.entity;
+package com.senac.gustavo.dto.response;
 
-import jakarta.persistence.*;
+import com.senac.gustavo.entity.FolhaPagamento;
+import com.senac.gustavo.entity.Role;
 
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
 
-
-@Entity
-@Table(name = "funcionario")
-public class Funcionario {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "funcionario_id")
-    private Integer id;
-
-    @Column(name = "funcionario_matricula")
+public class FuncionarioDtoResponse {
+    private int id;
     private String matricula;
-    @Column(name = "funcionario_nome")
+
     private String nome;
 
-    @Column(name = "funcionario_data_nascimento")
     private LocalDate dataNascimento;
 
-    @Column(name = "funcionario_chave_acesso")
     private String chaveAcesso;
 
-    @Column(name = "funcionario_status")
     private  Integer status;
 
-    @OneToMany(mappedBy = "funcionario")
     private Set<FolhaPagamento> folhaPagamento;
-
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
-    @JoinTable(name = "funcionario_role",
-            joinColumns = @JoinColumn(name = "funcionario_id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id"))
     private List<Role> roles;
 
-
-    //Getter and Setters
-
-    public Integer getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -78,8 +58,8 @@ public class Funcionario {
         return chaveAcesso;
     }
 
-    public void setChaveAcesso(String chaveAcesso) {
-        this.chaveAcesso = chaveAcesso;
+    public void setChaveAcesso(String chave_acesso) {
+        this.chaveAcesso = chave_acesso;
     }
 
     public Integer getStatus() {
@@ -105,4 +85,5 @@ public class Funcionario {
     public void setRoles(List<Role> roles) {
         this.roles = roles;
     }
+
 }

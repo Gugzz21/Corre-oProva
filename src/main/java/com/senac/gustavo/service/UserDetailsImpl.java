@@ -34,7 +34,7 @@ public class UserDetailsImpl implements UserDetails {
 
     @Override
     public String getPassword() {
-        return funcionario.getChave_acesso();
+        return funcionario.getChaveAcesso();
     } // Retorna a credencial do usuário que criamos anteriormente
 
     @Override

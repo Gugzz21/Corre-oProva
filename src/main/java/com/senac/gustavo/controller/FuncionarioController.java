@@ -1,12 +1,13 @@
 package com.senac.gustavo.controller;
 
+import com.senac.gustavo.dto.CreateUserDto;
+import com.senac.gustavo.dto.request.FuncionarioDtoRequest;
 import com.senac.gustavo.entity.Funcionario;
 import com.senac.gustavo.service.FuncionarioService;
+import io.swagger.v3.oas.annotations.Operation;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -33,6 +34,12 @@ public class FuncionarioController {
 
         return ResponseEntity.ok(funcionarioService.listarPorId(id));
 
+    }
+
+    @PostMapping("/criar")
+    public ResponseEntity<Void> criarFuncionario(@RequestBody FuncionarioDtoRequest funcionarioDtoRequest) {
+        funcionarioService.criarFuncionario(funcionarioDtoRequest);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
 }
