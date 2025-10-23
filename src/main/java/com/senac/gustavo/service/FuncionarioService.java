@@ -1,70 +1,90 @@
 package com.senac.gustavo.service;
 
+
 import com.senac.gustavo.config.SecurityConfiguration;
+import com.senac.gustavo.dto.LoginUserDto;
+import com.senac.gustavo.dto.RecoveryJwtTokenDto;
 import com.senac.gustavo.dto.request.FuncionarioDtoRequest;
 import com.senac.gustavo.dto.response.FuncionarioDtoResponse;
 import com.senac.gustavo.entity.Funcionario;
 import com.senac.gustavo.entity.Role;
 import com.senac.gustavo.entity.RoleName;
 import com.senac.gustavo.repository.FuncionarioRepository;
-import com.senac.gustavo.repository.RoleRepository;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
 public class FuncionarioService {
-
     private final FuncionarioRepository funcionarioRepository;
+    private final SecurityConfiguration securityConfig;
+    private final RoleService roleService;
 
-    private final SecurityConfiguration securityConfiguration;
-
-    private final RoleRepository roleRepository;
-
-
-    public FuncionarioService(FuncionarioRepository funcionarioRepository, SecurityConfiguration securityConfiguration, RoleRepository roleRepository) {
+    private final JwtTokenService jwtTokenService;
+    private final AuthenticationManager authenticationManager;
+    public FuncionarioService(FuncionarioRepository funcionarioRepository, SecurityConfiguration securityConfig,
+                              RoleService roleService, AuthenticationManager authenticationManager,
+                                JwtTokenService jwtTokenService) {
         this.funcionarioRepository = funcionarioRepository;
-        this.securityConfiguration = securityConfiguration;
-        this.roleRepository = roleRepository;
-
+        this.securityConfig = securityConfig;
+        this.roleService = roleService;
+        this.authenticationManager = authenticationManager;
+        this.jwtTokenService = jwtTokenService;
     }
+    public FuncionarioDtoResponse criarFuncionario(FuncionarioDtoRequest funcionarioRequest){
 
+        Funcionario funcionarioSalvo = new Funcionario();
+
+        funcionarioSalvo.setMatricula(funcionarioRequest.getMatricula());
+        funcionarioSalvo.setChaveAcesso(securityConfig.passwordEncoder().encode(funcionarioRequest.getChaveAcesso()));
+        funcionarioSalvo.setNome(funcionarioRequest.getNome());
+        funcionarioSalvo.setDataNascimento(funcionarioRequest.getDataNacimento());
+        funcionarioSalvo.setStatus(funcionarioRequest.getStatus());
+        Role role;
+        RoleName roleNome = funcionarioRequest.getRole();
+        role = roleService.getRolesByName(roleNome);
+        funcionarioSalvo.setRoles(List.of(role));
+
+        Funcionario funcionarioTemp = funcionarioRepository.save(funcionarioSalvo);
+        FuncionarioDtoResponse funcionarioResponse = new FuncionarioDtoResponse();
+
+        funcionarioResponse.setMatricula(funcionarioTemp.getMatricula());
+        funcionarioResponse.setNome(funcionarioTemp.getNome());
+        funcionarioResponse.setDataNacimento(funcionarioTemp.getDataNascimento());
+        funcionarioResponse.setStatus(funcionarioTemp.getStatus());
+        funcionarioResponse.setRoles(funcionarioSalvo.getRoles());
+
+        return funcionarioResponse;
+    }
     public List<Funcionario> listarTodos(){
-       return funcionarioRepository.findAll();
+        return funcionarioRepository.findAll();
     }
-
-    public Funcionario listarPorId(Integer id){
+    public Funcionario listaPorId(Integer id){
         return funcionarioRepository.findById(id).orElse(null);
     }
 
-    public FuncionarioDtoResponse criarFuncionario (FuncionarioDtoRequest funcionarioRequest){
-        Funcionario funcionariosave = new Funcionario();
+    public RecoveryJwtTokenDto autenticarFuncionario(LoginUserDto loginUserDto) {
 
-        funcionariosave.setMatricula(funcionarioRequest.getMatricula());
-        funcionariosave.setNome(funcionarioRequest.getNome());
-        funcionariosave.setChaveAcesso(securityConfiguration.passwordEncoder().encode(funcionarioRequest.getChaveAcesso()));
-        funcionariosave.setDataNascimento(funcionarioRequest.getDataNascimento());
-        funcionariosave.setStatus(funcionarioRequest.getStatus());
-        Role role = roleRepository.findByNome(RoleName.valueOf(funcionarioRequest.getRoles().getNome().name()))
-                .orElseThrow(() -> new RuntimeException("Role não encontrada para o nome fornecido."));
+        UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
+                new UsernamePasswordAuthenticationToken(loginUserDto.matricula(), loginUserDto.chaveAcesso());
 
+        Authentication authentication = authenticationManager.authenticate(usernamePasswordAuthenticationToken);
 
-        Funcionario funcionarioTemp = funcionarioRepository.save(funcionariosave);
-        FuncionarioDtoResponse funcionarioResponse = new FuncionarioDtoResponse();
-        funcionarioResponse.setMatricula(funcionarioTemp.getMatricula());
-        funcionarioResponse.setNome(funcionarioTemp.getNome());
-        funcionarioResponse.setChaveAcesso(funcionarioTemp.getChaveAcesso());
-        funcionarioResponse.setDataNascimento(funcionarioTemp.getDataNascimento());
-        funcionarioResponse.setStatus(funcionarioTemp.getStatus());
-        return funcionarioResponse;
+        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+
+        return new RecoveryJwtTokenDto(jwtTokenService.generateToken(userDetails));
     }
+}
 
 
 
 
 
 
-    }
+
 
 
 

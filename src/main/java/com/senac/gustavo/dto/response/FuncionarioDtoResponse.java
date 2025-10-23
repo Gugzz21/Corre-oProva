@@ -1,32 +1,24 @@
 package com.senac.gustavo.dto.response;
-
-import com.senac.gustavo.entity.FolhaPagamento;
 import com.senac.gustavo.entity.Role;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Set;
+
 
 public class FuncionarioDtoResponse {
-    private int id;
+    private Integer id;
     private String matricula;
-
     private String nome;
-
-    private LocalDate dataNascimento;
-
+    private LocalDate dataNacimento;
     private String chaveAcesso;
-
-    private  Integer status;
-
-    private Set<FolhaPagamento> folhaPagamento;
+    private Integer status;
     private List<Role> roles;
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -46,20 +38,20 @@ public class FuncionarioDtoResponse {
         this.nome = nome;
     }
 
-    public LocalDate getDataNascimento() {
-        return dataNascimento;
+    public LocalDate getDataNacimento() {
+        return dataNacimento;
     }
 
-    public void setDataNascimento(LocalDate dataNascimento) {
-        this.dataNascimento = dataNascimento;
+    public void setDataNacimento(LocalDate dataNacimento) {
+        this.dataNacimento = dataNacimento;
     }
 
     public String getChaveAcesso() {
         return chaveAcesso;
     }
 
-    public void setChaveAcesso(String chave_acesso) {
-        this.chaveAcesso = chave_acesso;
+    public void setChaveAcesso(String chaveAcesso) {
+        this.chaveAcesso = chaveAcesso;
     }
 
     public Integer getStatus() {
@@ -68,14 +60,6 @@ public class FuncionarioDtoResponse {
 
     public void setStatus(Integer status) {
         this.status = status;
-    }
-
-    public Set<FolhaPagamento> getFolhaPagamento() {
-        return folhaPagamento;
-    }
-
-    public void setFolhaPagamento(Set<FolhaPagamento> folhaPagamento) {
-        this.folhaPagamento = folhaPagamento;
     }
 
     public List<Role> getRoles() {

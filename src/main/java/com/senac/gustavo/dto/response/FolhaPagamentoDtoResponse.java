@@ -3,20 +3,16 @@ package com.senac.gustavo.dto.response;
 import com.senac.gustavo.entity.Funcionario;
 
 public class FolhaPagamentoDtoResponse {
-    private int id;
+    private Integer id;
     private Integer mes;
-
-    private Integer ano;
-
+    private  Integer ano;
     private Integer salario;
 
-    private Funcionario funcionario;
-
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -42,13 +38,5 @@ public class FolhaPagamentoDtoResponse {
 
     public void setSalario(Integer salario) {
         this.salario = salario;
-    }
-
-    public Funcionario getFuncionario() {
-        return funcionario;
-    }
-
-    public void setFuncionario(Funcionario funcionario) {
-        this.funcionario = funcionario;
     }
 }

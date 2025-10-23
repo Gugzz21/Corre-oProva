@@ -1,7 +1,10 @@
 package com.senac.gustavo.controller;
 
 import com.senac.gustavo.dto.CreateUserDto;
+import com.senac.gustavo.dto.LoginUserDto;
+import com.senac.gustavo.dto.RecoveryJwtTokenDto;
 import com.senac.gustavo.dto.request.FuncionarioDtoRequest;
+import com.senac.gustavo.dto.response.FuncionarioDtoResponse;
 import com.senac.gustavo.entity.Funcionario;
 import com.senac.gustavo.service.FuncionarioService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -12,34 +15,32 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/funcionario")
+@RequestMapping("/api/funcionario")
 public class FuncionarioController {
-
     private final FuncionarioService funcionarioService;
 
     public FuncionarioController(FuncionarioService funcionarioService) {
         this.funcionarioService = funcionarioService;
     }
 
-    //Endpoints para Listar Funcionários
     @GetMapping("/listar")
     public ResponseEntity<List<Funcionario>> listarFuncionarios(){
-
         return ResponseEntity.ok(funcionarioService.listarTodos());
-
     }
 
-    @GetMapping("/listar/{id}")
-    public ResponseEntity<Funcionario> listarFuncionarios(@PathVariable("id") Integer id){
-
-        return ResponseEntity.ok(funcionarioService.listarPorId(id));
-
+    @GetMapping("/lista/{id}")
+    public ResponseEntity<Funcionario> listarFuncionario(@PathVariable("id") Integer id){
+        return ResponseEntity.ok(funcionarioService.listaPorId(id));
     }
 
     @PostMapping("/criar")
-    public ResponseEntity<Void> criarFuncionario(@RequestBody FuncionarioDtoRequest funcionarioDtoRequest) {
-        funcionarioService.criarFuncionario(funcionarioDtoRequest);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+    public ResponseEntity<FuncionarioDtoResponse> criarFuncionario(@RequestBody FuncionarioDtoRequest funcionarioRequest){
+        return ResponseEntity.ok(funcionarioService.criarFuncionario(funcionarioRequest));
     }
 
+    @PostMapping("/login")
+    public ResponseEntity<RecoveryJwtTokenDto> loginFuncionario(@RequestBody LoginUserDto loginUserDto){
+        RecoveryJwtTokenDto tokenDto = funcionarioService.autenticarFuncionario(loginUserDto);
+        return new ResponseEntity<>(tokenDto, HttpStatus.OK);
+    }
 }

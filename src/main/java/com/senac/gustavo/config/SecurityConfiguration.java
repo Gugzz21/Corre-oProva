@@ -22,7 +22,8 @@ public class SecurityConfiguration {
     private UserAuthenticationFilter userAuthenticationFilter;
 
     public static final String [] ENDPOINTS_WITH_AUTHENTICATION_NOT_REQUIRED = {
-            "/api/funcionario/**",
+            "/api/funcionario/criar",
+            "/api/funcionario/login",
 
             // 🔓 Swagger/OpenAPI UI
             "/v3/api-docs/**",
@@ -32,7 +33,7 @@ public class SecurityConfiguration {
 
     // Endpoints que requerem autenticação para serem acessados
     public static final String [] ENDPOINTS_WITH_AUTHENTICATION_REQUIRED = {
-            "/users/test"
+            "/api/funcionario/listar"
     };
 
     // Endpoints que só podem ser acessador por usuários com permissão de cliente

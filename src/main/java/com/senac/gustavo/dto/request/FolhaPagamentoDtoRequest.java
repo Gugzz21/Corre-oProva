@@ -1,18 +1,10 @@
 package com.senac.gustavo.dto.request;
 
-import com.senac.gustavo.entity.Funcionario;
-
 public class FolhaPagamentoDtoRequest {
 
-
     private Integer mes;
-
-    private Integer ano;
-
+    private  Integer ano;
     private Integer salario;
-
-    private Funcionario funcionario;
-
 
     public Integer getMes() {
         return mes;
@@ -36,13 +28,5 @@ public class FolhaPagamentoDtoRequest {
 
     public void setSalario(Integer salario) {
         this.salario = salario;
-    }
-
-    public Funcionario getFuncionario() {
-        return funcionario;
-    }
-
-    public void setFuncionario(Funcionario funcionario) {
-        this.funcionario = funcionario;
     }
 }

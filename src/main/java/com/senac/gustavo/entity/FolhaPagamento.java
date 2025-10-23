@@ -6,7 +6,6 @@ import jakarta.persistence.*;
 @Entity
 @Table(name = "folha_pagamento")
 public class FolhaPagamento {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "folha_pagamento_id")
@@ -17,11 +16,11 @@ public class FolhaPagamento {
     private Integer ano;
     @Column(name = "folha_pagamento_salario")
     private Integer salario;
+
     @ManyToOne
     @JoinColumn(name = "funcionario_id", nullable = false)
     @JsonIgnore
     private Funcionario funcionario;
-
 
     public Integer getId() {
         return id;
